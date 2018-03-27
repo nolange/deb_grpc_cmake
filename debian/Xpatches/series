@@ -1,0 +1,6 @@
+openssl-1.1.0.diff
+no-werror.diff
+unvendor-zlib.diff
+fix-libgrpc++-soname.diff
+make-pkg-config-files-nonexecutable.diff
+add-wrap-memcpy-flags.diff

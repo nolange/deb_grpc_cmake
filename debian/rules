@@ -1,0 +1,39 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+gRPC_PACKAGES = ZLIB CARES SSL PROTOBUF GFLAGS BENCHMARK
+
+CMAKE_FLAGS = $(foreach pkg,$(gRPC_PACKAGES),-DgRPC_$(pkg)_PROVIDER=package)
+CMAKE_FLAGS += -DCMAKE_INSTALL_LIBDIR=/usr/lib/$(DEB_HOST_MULTIARCH) -DgRPC_INSTALL_LIBDIR=/usr/lib/$(DEB_HOST_MULTIARCH)
+CMAKE_FLAGS += -DBUILD_SHARED_LIBS=On
+
+# Doesnt build yet..
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+# CMAKE_FLAGS += -DgRPC_BUILD_TESTS=On
+endif
+
+
+%:
+	dh $@ --parallel --buildsystem=cmake --builddirectory=build
+
+override_dh_auto_configure:
+	-rm -rf third_party/googletest
+	-ln -sn /usr/src/googletest third_party/googletest
+	dh_auto_configure -- $(CMAKE_FLAGS)
+
+override_dh_auto_clean:
+	dh_auto_clean
+	-rm -f third_party/googletest
+	-mkdir third_party/googletest
+
+#override_dh_auto_test:
+#ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+#	cmake --build build --target buildtests
+#endif
+
+
+

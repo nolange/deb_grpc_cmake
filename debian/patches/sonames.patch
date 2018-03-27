@@ -1,0 +1,116 @@
+Description: fix sonames
+ Add sonames to the libaries, atleast to the ones that are built
+ .
+ grpc (1.10-0.1) unstable; urgency=medium
+ .
+   * New upstream release.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -623,6 +623,13 @@
+   DEPENDS buildtests_c buildtests_cxx)
+ endif (gRPC_BUILD_TESTS)
+ 
++function(_grpc_set_library_v _arg1)
++	set_target_properties(${_arg1}
++    PROPERTIES
++      VERSION ${PACKAGE_VERSION}
++      SOVERSION "1"
++  )
++endfunction()
+ 
+ add_library(gpr
+   src/core/lib/gpr/alloc.cc
+@@ -666,6 +673,7 @@
+   src/core/lib/profiling/basic_timers.cc
+   src/core/lib/profiling/stap_timers.cc
+ )
++_grpc_set_library_v(gpr)
+ 
+ if(WIN32 AND MSVC)
+   set_target_properties(gpr PROPERTIES COMPILE_PDB_NAME "gpr"
+@@ -1032,6 +1040,7 @@
+   src/core/ext/filters/workarounds/workaround_utils.cc
+   src/core/plugin_registry/grpc_plugin_registry.cc
+ )
++_grpc_set_library_v(grpc)
+ 
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc PROPERTIES COMPILE_PDB_NAME "grpc"
+@@ -1343,6 +1352,7 @@
+   src/core/ext/filters/load_reporting/server_load_reporting_plugin.cc
+   src/core/plugin_registry/grpc_cronet_plugin_registry.cc
+ )
++_grpc_set_library_v(grpc_cronet)
+ 
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc_cronet PROPERTIES COMPILE_PDB_NAME "grpc_cronet"
+@@ -2220,6 +2230,7 @@
+   src/core/ext/filters/workarounds/workaround_utils.cc
+   src/core/plugin_registry/grpc_unsecure_plugin_registry.cc
+ )
++_grpc_set_library_v(grpc_unsecure)
+ 
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc_unsecure PROPERTIES COMPILE_PDB_NAME "grpc_unsecure"
+@@ -2429,6 +2440,7 @@
+   src/cpp/util/time_cc.cc
+   src/cpp/codegen/codegen_init.cc
+ )
++_grpc_set_library_v(grpc++)
+ 
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc++ PROPERTIES COMPILE_PDB_NAME "grpc++"
+@@ -2969,6 +2981,7 @@
+   third_party/nanopb/pb_decode.c
+   third_party/nanopb/pb_encode.c
+ )
++_grpc_set_library_v(grpc++_cronet)
+ 
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc++_cronet PROPERTIES COMPILE_PDB_NAME "grpc++_cronet"
+@@ -3232,6 +3245,8 @@
+   src/cpp/util/error_details.cc
+ )
+ 
++_grpc_set_library_v(grpc++_error_details)
++
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc++_error_details PROPERTIES COMPILE_PDB_NAME "grpc++_error_details"
+     COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+@@ -3356,6 +3371,8 @@
+   ${_gRPC_PROTO_GENS_DIR}/src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h
+ )
+ 
++_grpc_set_library_v(grpc++_reflection)
++
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc++_reflection PROPERTIES COMPILE_PDB_NAME "grpc++_reflection"
+     COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+@@ -3835,6 +3852,8 @@
+   src/cpp/codegen/codegen_init.cc
+ )
+ 
++_grpc_set_library_v(grpc++_unsecure)
++
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc++_unsecure PROPERTIES COMPILE_PDB_NAME "grpc++_unsecure"
+     COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+@@ -4207,6 +4226,8 @@
+   src/compiler/ruby_generator.cc
+ )
+ 
++_grpc_set_library_v(grpc_plugin_support)
++
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc_plugin_support PROPERTIES COMPILE_PDB_NAME "grpc_plugin_support"
+     COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+@@ -4701,6 +4722,8 @@
+   src/csharp/ext/grpc_csharp_ext.c
+ )
+ 
++_grpc_set_library_v(grpc_csharp_ext)
++
+ if(WIN32 AND MSVC)
+   set_target_properties(grpc_csharp_ext PROPERTIES COMPILE_PDB_NAME "grpc_csharp_ext"
+     COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
