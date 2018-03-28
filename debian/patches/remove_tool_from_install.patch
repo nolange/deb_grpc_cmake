@@ -1,0 +1,150 @@
+From c4cc740d613d783304ff40989f0778eb9b655d18 Mon Sep 17 00:00:00 2001
+From: Vijay Pai <vpai@google.com>
+Date: Wed, 28 Mar 2018 11:25:37 -0700
+Subject: [PATCH] Remove tool from install
+
+---
+ CMakeLists.txt                    | 63 ---------------------------------------
+ templates/CMakeLists.txt.template |  4 +++
+ 2 files changed, 4 insertions(+), 63 deletions(-)
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5327,15 +5327,6 @@
+   gpr
+ )
+ 
+-
+-if (gRPC_INSTALL)
+-  install(TARGETS check_epollexclusive EXPORT gRPCTargets
+-    RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+-    LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+-  )
+-endif()
+-
+ if (gRPC_BUILD_TESTS)
+ 
+ add_executable(chttp2_hpack_encoder_test
+@@ -6565,15 +6556,6 @@
+   gpr
+ )
+ 
+-
+-if (gRPC_INSTALL)
+-  install(TARGETS grpc_create_jwt EXPORT gRPCTargets
+-    RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+-    LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+-  )
+-endif()
+-
+ if (gRPC_BUILD_TESTS)
+ 
+ add_executable(grpc_credentials_test
+@@ -6735,15 +6717,6 @@
+   gpr
+ )
+ 
+-
+-if (gRPC_INSTALL)
+-  install(TARGETS grpc_print_google_default_creds_token EXPORT gRPCTargets
+-    RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+-    LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+-  )
+-endif()
+-
+ if (gRPC_BUILD_TESTS)
+ 
+ add_executable(grpc_security_connector_test
+@@ -6822,15 +6795,6 @@
+   gpr
+ )
+ 
+-
+-if (gRPC_INSTALL)
+-  install(TARGETS grpc_verify_jwt EXPORT gRPCTargets
+-    RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+-    LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+-  )
+-endif()
+-
+ if (gRPC_BUILD_TESTS)
+ if(_gRPC_PLATFORM_LINUX)
+ 
+@@ -12510,15 +12474,6 @@
+ )
+ 
+ 
+-if (gRPC_INSTALL)
+-  install(TARGETS gen_hpack_tables EXPORT gRPCTargets
+-    RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+-    LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+-  )
+-endif()
+-
+-
+ add_executable(gen_legal_metadata_characters
+   tools/codegen/core/gen_legal_metadata_characters.cc
+ )
+@@ -12540,15 +12495,6 @@
+ )
+ 
+ 
+-if (gRPC_INSTALL)
+-  install(TARGETS gen_legal_metadata_characters EXPORT gRPCTargets
+-    RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+-    LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+-  )
+-endif()
+-
+-
+ add_executable(gen_percent_encoding_tables
+   tools/codegen/core/gen_percent_encoding_tables.cc
+ )
+@@ -12569,15 +12515,6 @@
+   ${_gRPC_ALLTARGETS_LIBRARIES}
+ )
+ 
+-
+-if (gRPC_INSTALL)
+-  install(TARGETS gen_percent_encoding_tables EXPORT gRPCTargets
+-    RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
+-    LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
+-    ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+-  )
+-endif()
+-
+ if (gRPC_BUILD_TESTS)
+ 
+ add_executable(badreq_bad_client_test
+--- a/templates/CMakeLists.txt.template
++++ b/templates/CMakeLists.txt.template
+@@ -289,11 +289,13 @@
+   endif (gRPC_BUILD_TESTS)
+   % else:
+   ${cc_library(lib)}
++  % if not lib.build in ["tool"]:
+   ${cc_install(lib)}
+   % endif
+   % endif
+   % endif
+   % endif
++  % endif
+   % endfor
+ 
+   % for tgt in targets:
+@@ -307,7 +309,9 @@
+   % else:
+   ${get_platforms_condition_begin(tgt.platforms)}\
+   ${cc_binary(tgt)}
++  % if not tgt.build in ["tool"]:
+   ${cc_install(tgt)}
++  % endif
+   ${get_platforms_condition_end(tgt.platforms)}\
+   % endif
+   % endif

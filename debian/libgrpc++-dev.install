@@ -1,4 +1,6 @@
+# deprecated headers
 usr/include/grpc++/
+usr/include/grpcpp/
 #usr/lib/*/libgrpc++*.a
 usr/lib/*/libgrpc++*.so
 #usr/lib/*/pkgconfig/grpc++.pc
