@@ -30,6 +30,13 @@ override_dh_auto_clean:
 	-rm -f third_party/googletest
 	-mkdir third_party/googletest
 
+override_dh_missing:
+	# remove some files that shouldn't have been installed in the first place
+	-rm -rf debian/tmp/usr/include/grpcpp
+	cd debian/tmp/usr/bin && rm -f gen_percent_encoding_tables gen_legal_metadata_characters gen_hpack_tables \
+	  grpc_verify_jwt grpc_print_google_default_creds_token grpc_create_jwt check_epollexclusive
+	dh_missing --list-missing
+
 #override_dh_auto_test:
 #ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 #	cmake --build build --target buildtests

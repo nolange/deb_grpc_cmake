@@ -7,3 +7,4 @@ usr/lib/*/libgrpc.so
 usr/lib/*/libgrpc_*.so
 #usr/lib/*/pkgconfig/grpc.pc
 #usr/lib/*/pkgconfig/grpc_unsecure.pc
+usr/lib/cmake/
